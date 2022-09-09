@@ -1,0 +1,77 @@
+go to root (cd /root/ ) . (both Master and Worker can perform this in their instances):
+[root@ip-172-31-0-164 ~]#
+
+2. git clone https://github.com/ashishrpandey/example-voting-app:
+
+[root@ip-172-31-0-164 ~]#  git clone https://github.com/ashishrpandey/                                                                                       example-voting-app
+Cloning into 'example-voting-app'...
+remote: Enumerating objects: 494, done.
+remote: Total 494 (delta 0), reused 0 (delta 0), pack-reused 494
+Receiving objects: 100% (494/494), 236.17 KiB | 10.73 MiB/s, done.
+Resolving deltas: 100% (179/179), done.
+
+[root@ip-172-31-0-164 ~]#
+[root@ip-172-31-0-164 ~]#
+[root@ip-172-31-0-164 ~]# ls
+example-voting-app       kubernetes-training
+firstchart          
+get_helm.sh 
+
+[root@ip-172-31-0-164 ~]# cd example-voting-app
+[root@ip-172-31-0-164 example-voting-app]# ls
+architecture.png               docker-stack.yml    result
+dockercloud.yml                k8s-specifications  vote
+docker-compose-javaworker.yml  LICENSE             worker
+docker-compose-simple.yml      MAINTAINERS
+docker-compose.yml             README.md
+
+[root@ip-172-31-0-164 example-voting-app]# cd k8s-specifications
+[root@ip-172-31-0-164 k8s-specifications]#
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl apply -f .
+deployment.apps/db created
+service/db created
+deployment.apps/redis created
+service/redis created
+deployment.apps/result created
+service/result created
+deployment.apps/vote created
+service/vote created
+[root@ip-172-31-0-164 k8s-specifications]#
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl get all
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/db-b54cd94f4-hjscr        1/1     Running   0          72s
+pod/redis-868d64d78-v27zj     1/1     Running   0          72s
+pod/result-5d57b59f4b-g2fkh   1/1     Running   0          72s
+pod/vote-94849dc97-g2j4s      1/1     Running   0          72s
+pod/worker-dd46d7584-j4ntk    1/1     Running   0          71s
+
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                                                                                 AGE
+service/db       ClusterIP   10.102.209.112   <none>        5432/TCP                                                                                                72s
+service/redis    ClusterIP   10.110.130.156   <none>        6379/TCP                                                                                                72s
+service/result   NodePort    10.96.103.103    <none>        5001:31001                                                                                       /TCP   72s
+service/vote     NodePort    10.99.43.17      <none>        5000:31000                                                                                       /TCP   71s
+
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/db       1/1     1            1           72s
+deployment.apps/redis    1/1     1            1           72s
+deployment.apps/result   1/1     1            1           72s
+deployment.apps/vote     1/1     1            1           72s
+deployment.apps/worker   1/1     1            1           71s
+
+NAME                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/db-b54cd94f4        1         1         1       72s
+replicaset.apps/redis-868d64d78     1         1         1       72s
+replicaset.apps/result-5d57b59f4b   1         1         1       72s
+replicaset.apps/vote-94849dc97      1         1         1       72s
+replicaset.apps/worker-dd46d7584    1         1         1       71s
+[root@ip-172-31-0-164 k8s-specifications]# kubectl get all
+NAME                          READY   STATUS    RESTARTS   AGE
+pod/db-b54cd94f4-hjscr        1/1     Running   0          102s
+pod/redis-868d64d78-v27zj     1/1     Running   0          102s
+pod/result-5d57b59f4b-g2fkh   1/1     Running   0          102s
+pod/vote-94849dc97-g2j4s      1/1     Running   0          102s
+pod/worker-dd46d7584-j4ntk    1/1     Running   0          101s
+
+deployment.apps/worker created
