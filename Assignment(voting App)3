@@ -1,0 +1,19 @@
+SOME JORGANS:
+
+Docker: 
+       Isolation and abstration
+       creating of containers & docker images.
+       
+Kubernetes:
+            nodes
+            cluster
+            pods & labels
+            conatiners
+            namespace
+            
+ Controller:
+           Replicaa set
+  Creating & deleting pods
+  replica manager
+  
+       
