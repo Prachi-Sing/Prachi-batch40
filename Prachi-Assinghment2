@@ -1,0 +1,88 @@
+ take your publicIP (your instance IP) : NodePort ► open 2 browsers , one for VOTING and one for Results.
+ try voting and see the results paralelly in results page.?
+ 
+ Objervation:
+ 
+ I just checked it 
+ 1st I put my publicip and then open in browser one for voting that I have used : 31000
+ and one for result that I have used : 31001
+ 
+ And when I voted to cats the voting has shows : Cats : DOgs 
+                                                100%    0.0%
+                                                
+                                                
+MY Observation:
+
+Observation after deleting the pods:
+Command used:
+kubectl delete po vote-94849dc97-g2j4s
+
+The voting application is working fine.
+[root@ip-172-31-0-164 k8s-specifications]# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-hjscr        1/1     Running   0          137m
+redis-868d64d78-v27zj     1/1     Running   0          137m
+result-5d57b59f4b-g2fkh   1/1     Running   0          137m
+vote-94849dc97-4r6f4      1/1     Running   0          33s
+worker-dd46d7584-j4ntk    1/1     Running   0          137m
+[root@ip-172-31-0-164 k8s-specifications]#
+
+
+WHAT happend after deleting working pod?
+
+Command Used:  kubectl delete po worker-dd46d7584-j4ntk
+The voting application is working fine.
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl delete po worker-dd46d7584-j4ntk
+pod "worker-dd46d7584-j4ntk" deleted
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl get po
+NAME                      READY   STATUS        RESTARTS   AGE
+db-b54cd94f4-hjscr        1/1     Running       0          140m
+redis-868d64d78-v27zj     1/1     Running       0          140m
+result-5d57b59f4b-g2fkh   1/1     Running       0          140m
+vote-94849dc97-4r6f4      1/1     Running       0          4m6s
+worker-dd46d7584-5nrjb    1/1     Running       0          13s
+worker-dd46d7584-j4ntk    1/1     Running       0          140m
+
+WHAT HAPPENED AFTER DELETING db pod:
+
+command used:kubectl delete po db-b54cd94f4-hjscr
+After deleting the db pod voting app is not working.
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl delete po db-b54cd94f4-hjscr pod "db-b54cd94f4-hjscr" deleted
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl get po
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-lkntc        1/1     Running   0          78s
+redis-868d64d78-v27zj     1/1     Running   0          145m
+result-5d57b59f4b-g2fkh   1/1     Running   0          145m
+vote-94849dc97-4r6f4      1/1     Running   0          8m23s
+worker-dd46d7584-5nrjb    1/1     Running   1          4m30s
+
+** WHY Result app Stopped working after deleting the db pod?
+
+The result app stopped getting stopped because the connection between the result pod & db pod was stopped. 
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl logs -f result-5d57b59f4b-g2fkh
+Fri, 09 Sep 2022 05:58:17 GMT body-parser deprecated bodyParser: use individual json/urlencoded middlewares at server.js:67:9
+Fri, 09 Sep 2022 05:58:17 GMT body-parser deprecated undefined extended: provide extended option at ../node_modules/body-parser/index.js:105:29
+App running on port 80
+Connected to db
+Error performing query: error: relation "votes" does not exist
+
+
+HOW TO MAKE the Result pod Work AGAIN ?
+
+After deleting the result pod the connection got establish
+COMMAND USED: kubectl delete po result-5d57b59f4b-g2fkh
+
+[root@ip-172-31-0-164 k8s-specifications]# kubectl delete po result-5d57b59f4b-g2fkh
+pod "result-5d57b59f4b-g2fkh" deleted
+[root@ip-172-31-0-164 k8s-specifications]#
+
+
+
+
+
+
